@@ -3,6 +3,8 @@ import './App.css';
 import InputFields from './components/InputFields'
 import DataTable from './components/DataTable'
 
+const API_KEY = 'AIzaSyD6ba4mKmnnU0EVfg_hy_jNI3B8eJchAo4' 
+
 class App extends React.Component {
 
   constructor(props) {
@@ -36,10 +38,25 @@ class App extends React.Component {
       let items = await json.items
       console.log(items)
       this.setState({ items })
+      this.getVideoTimes(items)
     } catch (error) {
       console.log(error)
     }
     //'https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=_Mh1QhMc%2Cc0KYU2j0TM4%2CeIho2S0ZahI&key=[YOUR_API_KEY]'
+  }
+
+  async getVideoTimes(videos) {
+    let videoString = ''
+    for (let video of videos) {
+      videoString += video.id.videoId + '%2C'
+    }
+    videoString = videoString.slice(0, videoString.length - 3)
+    console.log(videoString)
+    let full_url = 'https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=' + videoString + '&key=' + API_KEY
+    console.log(full_url)
+    let resp = await fetch(full_url)
+    let json = await resp.json()
+    console.log(json)
   }
 
   render() {
