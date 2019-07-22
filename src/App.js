@@ -57,6 +57,26 @@ class App extends React.Component {
     let resp = await fetch(full_url)
     let json = await resp.json()
     console.log(json)
+    this.convertVideoLength(23)
+  }
+
+  convertVideoDuration(duration) {
+    let hoursRegex = /\d+H/
+    let hours = duration.match(hoursRegex)
+
+    let minutesRegex = /\d+M/
+    let minutes = duration.match(minutesRegex)
+
+    let secondsRegex = /\d+S/
+    let seconds = duration.match(secondsRegex)
+
+    let durationFormatted = {
+      hours: hours === null ? undefined : hours[0],
+      minutes: minutes === null ? undefined : minutes[0],
+      seconds: seconds === null ? undefined : seconds[0]
+    }
+    
+    return durationFormatted
   }
 
   render() {
