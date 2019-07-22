@@ -19,7 +19,8 @@ class App extends React.Component {
   //Converts a YT username to an ID number
   async getID(username) {
     console.log('Getting ID...')
-    let resp = await fetch('https://www.googleapis.com/youtube/v3/channels?part=snippet&forUsername=' + username + '&key=AIzaSyD6ba4mKmnnU0EVfg_hy_jNI3B8eJchAo4')
+    
+    let resp = await fetch('https://www.googleapis.com/youtube/v3/channels?part=snippet&forUsername=' + username + '&key=' + API_KEY)
     let json = await resp.json()
 
     if (json.items.length === 0){
@@ -34,7 +35,7 @@ class App extends React.Component {
   async getVideos(username) {
     try {
       let id = await this.getID(username)
-      let data = await fetch('https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=back&channelId=' + id + '&key=AIzaSyD6ba4mKmnnU0EVfg_hy_jNI3B8eJchAo4')
+      let data = await fetch('https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=back&channelId=' + id + '&key=' + API_KEY)
       let json = await data.json()
       let items = await json.items
       console.log(items)
@@ -79,9 +80,9 @@ class App extends React.Component {
     let seconds = duration.match(secondsRegex)
 
     let durationFormatted = {
-      hours: hours === null ? undefined : hours[0],
-      minutes: minutes === null ? undefined : minutes[0],
-      seconds: seconds === null ? undefined : seconds[0]
+      hours: hours === null ? 0 : hours[0],
+      minutes: minutes === null ? 0 : minutes[0],
+      seconds: seconds === null ? 0 : seconds[0]
     }
     
     return durationFormatted
