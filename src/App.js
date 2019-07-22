@@ -32,18 +32,18 @@ class App extends React.Component {
     return id
   }
 
-  async getVideos(username) {
+  async getVideos(username, searchterm) {
     try {
       let id = await this.getID(username)
-      let data = await fetch('https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=back&channelId=' + id + '&key=' + API_KEY)
+      let data = await fetch('https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=' + searchterm + '&channelId=' + id + '&key=' + API_KEY)
       let json = await data.json()
       let items = await json.items
       console.log(items)
-      this.setState({ items })
       let durations = await this.getVideoDurations(items)
       let newItems = items.map(item => {
         return Object.assign(item, {duration: durations[item.id.videoId]})
       })
+      this.setState({ items })
       console.log(newItems)
     } catch (error) {
       console.log(error)
@@ -71,18 +71,21 @@ class App extends React.Component {
   convertVideoDuration(duration) {
     //Input must be string
     let hoursRegex = /\d+H/
-    let hours = duration.match(hoursRegex)
+    let hoursString = duration.match(hoursRegex)
+    let hours = hoursString === null ? 0 : parseInt(hoursString[0].slice(0, hoursString[0].length - 1))
 
     let minutesRegex = /\d+M/
-    let minutes = duration.match(minutesRegex)
+    let minutesString = duration.match(minutesRegex)
+    let minutes = minutesString === null ? 0 : parseInt(minutesString[0].slice(0, minutesString[0].length - 1))
 
     let secondsRegex = /\d+S/
-    let seconds = duration.match(secondsRegex)
+    let secondsString = duration.match(secondsRegex)
+    let seconds = secondsString === null ? 0 : parseInt(secondsString[0].slice(0, secondsString[0].length - 1))
 
     let durationFormatted = {
-      hours: hours === null ? 0 : hours[0],
-      minutes: minutes === null ? 0 : minutes[0],
-      seconds: seconds === null ? 0 : seconds[0]
+      hours,
+      minutes,
+      seconds
     }
     
     return durationFormatted
