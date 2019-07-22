@@ -32,19 +32,26 @@ class App extends React.Component {
     return id
   }
 
-  async getVideos(username, searchterm) {
+  async getVideos(username, searchTerm, lowerDuration, upperDuration) {
     try {
       let id = await this.getID(username)
-      let data = await fetch('https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=' + searchterm + '&channelId=' + id + '&key=' + API_KEY)
+      let data = await fetch('https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&q=' + searchTerm + '&channelId=' + id + '&key=' + API_KEY)
       let json = await data.json()
       let items = await json.items
-      console.log(items)
       let durations = await this.getVideoDurations(items)
-      let newItems = items.map(item => {
+  
+      await items.forEach(item => {
         return Object.assign(item, {duration: durations[item.id.videoId]})
       })
-      this.setState({ items })
+      let newItems = await items.filter(item => {
+        //TODO: Improve this catch for missing duration from API request
+        if (item.duration !== undefined) {
+          return lowerDuration < item.duration.minutes && item.duration.minutes < upperDuration
+        }
+        return false
+      })
       console.log(newItems)
+      this.setState({ items: newItems })
     } catch (error) {
       console.log(error)
     }
@@ -60,6 +67,7 @@ class App extends React.Component {
     let resp = await fetch(full_url)
     let json = await resp.json()
     let items = await json.items
+    console.log(items)
     let durations = {}
     for (let item of items) {
       durations[item.id] = this.convertVideoDuration(item.contentDetails.duration)
