@@ -16,6 +16,7 @@ class App extends React.Component {
     this.getVideos = this.getVideos.bind(this)
   }
 
+  //Converts a YT username to an ID number
   async getID(username) {
     console.log('Getting ID...')
     let resp = await fetch('https://www.googleapis.com/youtube/v3/channels?part=snippet&forUsername=' + username + '&key=AIzaSyD6ba4mKmnnU0EVfg_hy_jNI3B8eJchAo4')
@@ -38,29 +39,36 @@ class App extends React.Component {
       let items = await json.items
       console.log(items)
       this.setState({ items })
-      this.getVideoTimes(items)
+      let durations = await this.getVideoDurations(items)
+      let newItems = items.map(item => {
+        return Object.assign(item, {duration: durations[item.id.videoId]})
+      })
+      console.log(newItems)
     } catch (error) {
       console.log(error)
     }
-    //'https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=_Mh1QhMc%2Cc0KYU2j0TM4%2CeIho2S0ZahI&key=[YOUR_API_KEY]'
   }
 
-  async getVideoTimes(videos) {
+  async getVideoDurations(videos) {
     let videoString = ''
     for (let video of videos) {
       videoString += video.id.videoId + '%2C'
     }
-    videoString = videoString.slice(0, videoString.length - 3)
-    console.log(videoString)
+    videoString = videoString.slice(0, videoString.length - 3) //Remove last %2C
     let full_url = 'https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=' + videoString + '&key=' + API_KEY
-    console.log(full_url)
     let resp = await fetch(full_url)
     let json = await resp.json()
-    console.log(json)
-    this.convertVideoLength(23)
+    let items = await json.items
+    let durations = {}
+    for (let item of items) {
+      durations[item.id] = this.convertVideoDuration(item.contentDetails.duration)
+    }
+    console.log(durations)
+    return durations
   }
 
   convertVideoDuration(duration) {
+    //Input must be string
     let hoursRegex = /\d+H/
     let hours = duration.match(hoursRegex)
 
