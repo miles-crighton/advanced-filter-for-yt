@@ -1,8 +1,13 @@
+import { getLocalStorage, setLocalStorage } from './localStorage'
+
 const API_KEY = 'AIzaSyD6ba4mKmnnU0EVfg_hy_jNI3B8eJchAo4'
 
 //Converts a YT username to an ID number
-export async function getID(username, ids) {
+export async function getID(username) {
     console.log('Getting ID...')
+
+    let ids = JSON.parse(getLocalStorage('ytUserIDs'))
+    if (ids === null) { ids = {} }
 
     if (ids[username] !== undefined) {
         let id = ids[username]
@@ -19,5 +24,9 @@ export async function getID(username, ids) {
 
     let id = json.items[0].id
     console.log(`Id for ${username} fetched: ${id}`)
+
+    //Set local storage
+    setLocalStorage('ytUserIDs', ids)
+
     return id
 }

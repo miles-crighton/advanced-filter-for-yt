@@ -1,3 +1,8 @@
+/**
+ * Convert YT video duration into object format
+ * @param {string} duration - Duration of video in YT formatting (eg PT21M43S)
+ * @return {object}             The video duration in format: {hours, minutes, seconds}
+ */
 export function convertVideoDuration(duration) {
     //Input must be string
     let hoursRegex = /\d+H/
