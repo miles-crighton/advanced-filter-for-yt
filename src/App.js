@@ -6,6 +6,8 @@ import InputFields from './components/InputFields'
 import DataTable from './components/DataTable'
 import StatusDisplay from './components/StatusDisplay'
 
+import { convertVideoDuration } from './helperFunctions.js'
+
 const AppStyled = styled.div`
   margin: 0;
   display: flex;
@@ -90,14 +92,15 @@ class App extends React.Component {
     this.setState({ status: 'fetching' })
     try {
       let id = await this.getID(username)
-      let data = await fetch('https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=50&q=' + searchTerm + '&channelId=' + id + '&key=' + API_KEY)
+      let data = await fetch('https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&q=' + searchTerm + '&channelId=' + id + '&key=' + API_KEY)
       let json = await data.json()
       let items = await json.items
-      let durations = await this.getVideoDurations(items)
+      console.log(json)
 
       if (items.length === 0) {
         this.setState({ status: 'noresults' })
       } else {
+        let durations = await this.getVideoDurations(items)
         await items.forEach(item => {
           return Object.assign(item, { duration: durations[item.id.videoId] })
         })
@@ -129,32 +132,10 @@ class App extends React.Component {
     console.log(items)
     let durations = {}
     for (let item of items) {
-      durations[item.id] = this.convertVideoDuration(item.contentDetails.duration)
+      durations[item.id] = convertVideoDuration(item.contentDetails.duration)
     }
     console.log(durations)
     return durations
-  }
-
-  convertVideoDuration(duration) {
-    //Input must be string
-    let hoursRegex = /\d+H/
-    let hoursString = duration.match(hoursRegex)
-    let hours = hoursString === null ? 0 : parseInt(hoursString[0].slice(0, hoursString[0].length - 1))
-
-    let minutesRegex = /\d+M/
-    let minutesString = duration.match(minutesRegex)
-    let minutes = minutesString === null ? 0 : parseInt(minutesString[0].slice(0, minutesString[0].length - 1))
-
-    let secondsRegex = /\d+S/
-    let secondsString = duration.match(secondsRegex)
-    let seconds = secondsString === null ? 0 : parseInt(secondsString[0].slice(0, secondsString[0].length - 1))
-
-    let durationFormatted = {
-      hours,
-      minutes,
-      seconds
-    }
-    return durationFormatted
   }
 
   sortItems(ascending = false) {
