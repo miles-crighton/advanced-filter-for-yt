@@ -32,7 +32,8 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: []
+      items: [],
+      ids: {}
     }
     this.getID = this.getID.bind(this)
     this.getVideos = this.getVideos.bind(this)
@@ -41,6 +42,12 @@ class App extends React.Component {
   //Converts a YT username to an ID number
   async getID(username) {
     console.log('Getting ID...')
+
+    if (this.state.ids[username] !== undefined) {
+      let id = this.state.ids[username]
+      console.log(`Found cached id: ${id} for ${username}`)
+      return this.state.ids[username]
+    }
     
     let resp = await fetch('https://www.googleapis.com/youtube/v3/channels?part=snippet&forUsername=' + username + '&key=' + API_KEY)
     let json = await resp.json()
@@ -50,6 +57,9 @@ class App extends React.Component {
     }
 
     let id = json.items[0].id
+    this.setState((prevState) => {
+      return { ids: Object.assign({}, this.state.ids, { [username]: id }) }
+    })
     console.log(`Id for ${username} fetched: ${id}`)
     return id
   }
