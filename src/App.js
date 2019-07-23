@@ -68,32 +68,28 @@ class App extends React.Component {
   async getVideos(username, searchTerm, lowerDuration, upperDuration) {
     this.setState({ status: 'fetching' })
     try {
-      let id = await getID(username, this.state.ids)
-      this.setState((prevState) => {
-        return { ids: Object.assign({}, prevState.ids, { [username]: id }) }
-      })
+      let id = await getID(username)
+      // let data = await fetch('https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&q=' + searchTerm + '&channelId=' + id + '&key=' + API_KEY)
+      // let json = await data.json()
+      // let items = await json.items
+      // console.log(json)
 
-      let data = await fetch('https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&q=' + searchTerm + '&channelId=' + id + '&key=' + API_KEY)
-      let json = await data.json()
-      let items = await json.items
-      console.log(json)
-
-      if (items.length === 0) {
-        this.setState({ status: 'noresults' })
-      } else {
-        let durations = await this.getVideoDurations(items)
-        await items.forEach(item => {
-          return Object.assign(item, { duration: durations[item.id.videoId] })
-        })
-        let newItems = await items.filter(item => {
-          //TODO: Improve this catch for missing duration from API request
-          if (item.duration !== undefined) {
-            return lowerDuration < item.duration.minutes && item.duration.minutes < upperDuration
-          }
-          return false
-        })
-        this.setState({ items: newItems, status: 'fetched' })
-      }
+      // if (items.length === 0) {
+      //   this.setState({ status: 'noresults' })
+      // } else {
+      //   let durations = await this.getVideoDurations(items)
+      //   await items.forEach(item => {
+      //     return Object.assign(item, { duration: durations[item.id.videoId] })
+      //   })
+      //   let newItems = await items.filter(item => {
+      //     //TODO: Improve this catch for missing duration from API request
+      //     if (item.duration !== undefined) {
+      //       return lowerDuration < item.duration.minutes && item.duration.minutes < upperDuration
+      //     }
+      //     return false
+      //   })
+      //   this.setState({ items: newItems, status: 'fetched' })
+      // }
     } catch (error) {
       console.log(error)
       this.setState({ status: 'error' })
