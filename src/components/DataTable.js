@@ -12,13 +12,18 @@ let Table = styled.table`
         max-width: 200px;
     }
 `
-
 let TdTitle = styled.td`
         width: 300px;
         max-width: 300px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+`
+const CircleButton = styled.button`
+    background: white;
+    color: black;
+    border-radius: 15px;
+    outline: none;
 `
 
 export default function DataTable(props) {
@@ -28,9 +33,9 @@ export default function DataTable(props) {
                 <tr>
                     <th>Title</th>
                     <th>
-                        <span>Duration</span>
-                        <button onClick={() => props.sortItems(true)}>↑</button>
-                        <button onClick={() => props.sortItems(false)}>↓</button>
+                        <div>Duration</div>
+                        <CircleButton onClick={() => props.sortItems(true)}>↑</CircleButton>
+                        <CircleButton onClick={() => props.sortItems(false)}>↓</CircleButton>
                     </th>
                     <th>Link</th>
                 </tr>

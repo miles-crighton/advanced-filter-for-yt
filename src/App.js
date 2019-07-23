@@ -1,15 +1,15 @@
 import React from 'react';
+import styled from 'styled-components'
+
 import logo from './logo.svg'
 import InputFields from './components/InputFields'
 import DataTable from './components/DataTable'
-import styled from 'styled-components'
-import { thisTypeAnnotation } from '@babel/types';
+import StatusDisplay from './components/StatusDisplay'
 
 const AppStyled = styled.div`
   margin: 0;
   display: flex;
   justify-content: center;
-
   height: 100%;
 `
 
@@ -34,7 +34,6 @@ const OuterContainer = styled.div`
     padding: 5px 0px 5px 0px;
     color: white;
     text-align: center
-
   }
   p {
     margin: 5px;
@@ -180,7 +179,7 @@ class App extends React.Component {
             </Title>
             <InputFields submit={this.getVideos} />
             <StatusDisplay status={this.state.status} />
-            {this.state.status === 'fetched' ? <DataTable items={this.state.items} sortItems={this.state.sortItems} /> : null}
+            {this.state.status === 'fetched' ? <DataTable items={this.state.items} sortItems={this.sortItems} /> : null}
           </InnerContainer>
           <footer>
             <p>Assests & Data property of YouTube ©</p>
