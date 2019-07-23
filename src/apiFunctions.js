@@ -85,34 +85,51 @@ export async function getVideoDurations(videoIDs) {
     return durations
 }
 
+/**
+ * Request videos that match argument criteria from YT API
+ * @param {String} username - Requested username for search query
+ * @param {String} searchTerm - Requested search term
+ * @param {Number} lowerDuration - Lower bound for video durations
+ * @param {Number} upperDuration - Upper bound for video durations
+ * @return {object}          Returns items and status to react { status, items }
+ */
 export async function getVideoList(username, searchTerm, lowerDuration, upperDuration) {
     try {
+        //Retrieve the ID for the requested username
         let id = await getID(username)
+
+        //Request search query data from YT API
         const MAX_RESULTS = 5
         const baseURL = 'https://www.googleapis.com/youtube/v3/search?part=snippet'
         const fullURL = baseURL + '&maxResults=' + MAX_RESULTS + '&q=' + searchTerm + ' &channelId=' + id + ' &key=' + API_KEY
         let data = await fetch(fullURL)
         let json = await data.json()
         let items = json.items
-        console.log(json)
 
+        //Check if above search query returned results
         if (items.length === 0) {
-          return { items: [], status: 'noresults'}
-        } else {
-            //TODO: Form ID array from items and pass in below
-            //let durations = await getVideoDurations(items)
-            items.forEach(item => {
-                return Object.assign(item, { duration: durations[item.id.videoId] })
-            })
-            let newItems = items.filter(item => {
-                //TODO: Improve this catch for missing duration from API request
-                if (item.duration !== undefined) {
-                return lowerDuration < item.duration.minutes && item.duration.minutes < upperDuration
-                }
-                return false
-            })
-            return { items: newItems, status: 'fetched' }
+            return { items: [], status: 'noresults'}
         }
+
+        //Get durations of videos from above search query
+        let videoIDs = items.map(item => {
+            return item.id.videoId
+        })
+        let durations = await getVideoDurations(videoIDs)
+
+        //Handle filtering based on video durations
+        items.forEach(item => {
+            return Object.assign(item, { duration: durations[item.id.videoId] })
+        })
+        let newItems = items.filter(item => {
+            //TODO: Improve this catch for missing duration from API request
+            if (item.duration !== undefined) {
+                return lowerDuration < item.duration.minutes && item.duration.minutes < upperDuration
+            }
+            return false
+        })
+
+        return { items: newItems, status: 'fetched' }
     } catch (error) {
         console.log(error)
         return ({ items: [], status: 'error' })
