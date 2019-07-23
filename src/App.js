@@ -1,5 +1,4 @@
 import React from 'react';
-import './App.css';
 import logo from './logo.svg'
 import InputFields from './components/InputFields'
 import DataTable from './components/DataTable'
