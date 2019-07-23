@@ -20,13 +20,25 @@ const Logo = styled.img`
 
 const Title = styled.div`
   display: flex;
+  width: 100%;
 `
 
-const Container = styled.div`
+const OuterContainer = styled.div`
   background-color: lightgrey;
-  min-width: 400px;
-  padding: 0px 30px 0px 30px;
+  min-width: 460px;
   height: 100%;
+
+  footer {
+    background: grey;
+    width: 100%;
+    padding: 5px 0px 5px 0px;
+    color: white;
+    text-align: center
+  }
+`
+
+const InnerContainer = styled.div`
+    margin: 0px 30px 0px 30px;
 `
 
 const API_KEY = 'AIzaSyD6ba4mKmnnU0EVfg_hy_jNI3B8eJchAo4'
@@ -156,15 +168,21 @@ class App extends React.Component {
   render() {
     return (
       <AppStyled>
-        <Container>
-          <Title>
-            <Logo src={logo} alt='logo'></Logo>
-            <h1>Advanced Filter</h1>
-          </Title>
-          <InputFields submit={this.getVideos} />
-          {this.state.fetching ? 'Getting data...' : <DataTable items={this.state.items} sortItems={this.sortItems} />}
-        </Container>
+        <OuterContainer>
+          <InnerContainer>
+            <Title>
+              <Logo src={logo} alt='logo'></Logo>
+              <h1>Advanced Filter</h1>
+            </Title>
+            <InputFields submit={this.getVideos} />
+            {this.state.fetching ? 'Getting data...' : <DataTable items={this.state.items} sortItems={this.sortItems} />}
+
+          </InnerContainer>
+          <footer>Built by Miles</footer>
+        </OuterContainer>
+
       </AppStyled>
+
     );
   }
 }
