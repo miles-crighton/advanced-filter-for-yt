@@ -1,14 +1,31 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
+
+import PresetHandler from './PresetHandler'
 
 import { setLocalStorage, getLocalStorage } from '../localStorage'
 
 const InputNum = styled.input`
     max-width: 30px;
 `
-
-const InputFieldsContainer = styled.div`
+const QueryInputs = styled.div`
     border: 1px solid grey;
+    table {
+        width: 100%;
+    }
+    button {
+        display: block;
+        width: 50%;
+        margin: auto;
+    }
+`
+const InputsContainer = styled.div`
+    display: flex;
+
+
+
+
+
 `
 
 export default function InputFields(props) {
@@ -22,103 +39,111 @@ export default function InputFields(props) {
         props.submit(username, searchTerm, lowerDuration, upperDuration)
     }
 
-
-
     function savePreset(name) {
         console.log(`Saving preset: ${name}`)
+
         //Retrieve presets from local storage
-        //If Override, alert to confirm with user
+        let presets = JSON.parse(getLocalStorage('presets'))
+        if (presets === null) { presets = {} }
+
+        if (Object.keys(presets).length >= 10) {
+            alert('Max presets reached - try deleting some.')
+            return
+        }
+
+        //If Overide, alert to confirm with user
+        if (presets[name] !== undefined) {
+            let overide = window.confirm('Do you want to overide preset?');
+            if (!overide) {
+                console.log('Aborting preset save')
+                return 
+            }
+        }
+
         //Store name with current hook values
+        presets[name] = { username, searchTerm, lowerDuration, upperDuration }
+
+        setLocalStorage('presets', presets)
+        console.log('Presets stored: ', getLocalStorage('presets'))
     }
 
     function loadPreset(name) {
         console.log(`Loading preset: ${name}`)
-        //Retrieve preset lists from local storage
+        //Retrieve presets from local storage
+        let presets = JSON.parse(getLocalStorage('presets'))
+        if (presets === null) { presets = {} }
+
         //Check to see if it exists (it should as being passed to list selection as props)
+        let preset = presets[name]
+        if (preset === undefined) {
+            console.log('Preset not found')
+            return
+        }
+
         //Set hook values based on preset values
+        setUsername(preset.username)
+        setSearchterm(preset.searchTerm)
+        setUpperDuration(preset.upperDuration)
+        setLowerDuration(preset.lowerDuration)
+
+        console.log(`Finished loading preset: ${name}`)
     }
 
     function deletePreset(name) {
         console.log(`Deleting preset: ${name}`)
-        //Retrieve preset list
+
+        //Retrieve presets from local storage
+        let presets = JSON.parse(getLocalStorage('presets'))
+        if (presets === null) { presets = {} }
+
         //Remove named preset
+        if (presets[name] !== undefined) {
+            delete presets[name]
+        }
+
         //Save back to local storage
+        setLocalStorage('presets', presets)
+        console.log('Presets stored: ', getLocalStorage('presets'))
     }
 
     return (
-        <InputFieldsContainer>
-            <form onSubmit={handleSubmit}>
-                <table>
-                    <tbody>
-                        <tr>
-                            <td>Channel Name: </td>
-                            <td>
-                                <input type='text' value={username} onChange={e => setUsername(e.target.value)} />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Search Term: </td>
-                            <td>
-                                <input type='text' value={searchTerm} onChange={e => setSearchterm(e.target.value)} />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Duration: </td>
-                            <td>
-                                <InputNum type='number' value={lowerDuration} onChange={e => setLowerDuration(e.target.value)} min="0" max="60" />
-                                <span> to </span>
-                                <InputNum type='number' value={upperDuration} onChange={e => setUpperDuration(e.target.value)} min="0" max="60" />
-                                <span> minutes</span>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <button onClick={handleSubmit}>Search</button>
-            </form>
+        <InputsContainer>
+            <QueryInputs>
+                <form onSubmit={handleSubmit}>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>Channel Name: </td>
+                                <td>
+                                    <input type='text' value={username} onChange={e => setUsername(e.target.value)} />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Search Term: </td>
+                                <td>
+                                    <input type='text' value={searchTerm} onChange={e => setSearchterm(e.target.value)} />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Duration: </td>
+                                <td>
+                                    <InputNum type='number' value={lowerDuration} onChange={e => setLowerDuration(e.target.value)} min="0" max="60" />
+                                    <span> to </span>
+                                    <InputNum type='number' value={upperDuration} onChange={e => setUpperDuration(e.target.value)} min="0" max="60" />
+                                    <span> minutes</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button onClick={handleSubmit}>Search</button>
+                </form>
+            </QueryInputs>
             <PresetHandler 
                 savePreset={savePreset} 
                 loadPreset={loadPreset} 
                 deletePreset={deletePreset} 
             />
-        </InputFieldsContainer>
+        </InputsContainer>
     );
 }
 
-const presets = ['preset1', 'preset2', 'preset3']
-
-function PresetHandler(props) {
-    const [presetName, setPresetName] = useState('')
-
-    //Use effect to load presets for use in datalist?
-    useEffect(() => {
-        //Load in list of preset names
-        console.log('Heyo')
-    });
-
-    function handleSubmit(e) {
-        //Change submit behaviour based on presetName exists?
-        //Load if exists, save otherwise
-        e.preventDefault()
-        console.log(`Saving Preset: ${presetName}`)
-        props.savePreset(presetName)
-    }
-
-
-
-    return (
-        <div>
-            <div>Presets</div>
-            <input list="presets" value={presetName} onChange={e => setPresetName(e.target.value)} name="presets" />
-            <datalist id="presets">
-                {presets.map((item, idx) => {
-                    return <option value={item} key={idx} />
-                })}
-            </datalist>
-            <div>
-                <button onClick={() => props.loadPreset(presetName)}>Load</button>
-                <button onClick={() => props.savePreset(presetName)}>Save</button>
-                <button onClick={() => props.deletePreset(presetName)}>Delete</button>
-            </div>
-        </div>
-    )
-}
