@@ -34,6 +34,10 @@ const OuterContainer = styled.div`
     padding: 5px 0px 5px 0px;
     color: white;
     text-align: center
+
+  }
+  p {
+    margin: 5px;
   }
 `
 
@@ -178,7 +182,9 @@ class App extends React.Component {
             {this.state.fetching ? 'Getting data...' : <DataTable items={this.state.items} sortItems={this.sortItems} />}
 
           </InnerContainer>
-          <footer>Built by Miles</footer>
+          <footer>
+            <p>Assests & Data gathered from YouTube ©</p>
+          </footer>
         </OuterContainer>
 
       </AppStyled>
