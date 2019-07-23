@@ -21,6 +21,7 @@ const Title = styled.div`
 
 const Container = styled.div`
   background-color: lightgrey;
+  min-width: 400px;
   padding: 30px;
   height: 100%;
 `
@@ -34,7 +35,8 @@ class App extends React.Component {
     this.state = {
       items: [],
       ids: {},
-      durations: {}
+      durations: {},
+      fetching: false,
     }
     this.getID = this.getID.bind(this)
     this.getVideos = this.getVideos.bind(this)
@@ -67,6 +69,7 @@ class App extends React.Component {
   }
 
   async getVideos(username, searchTerm, lowerDuration, upperDuration) {
+    this.setState({ fetching: true })
     try {
       let id = await this.getID(username)
       let data = await fetch('https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&q=' + searchTerm + '&channelId=' + id + '&key=' + API_KEY)
@@ -88,9 +91,10 @@ class App extends React.Component {
         }
         return false
       })
-      this.setState({ items: newItems })
+      this.setState({ items: newItems, fetching: false })
     } catch (error) {
       console.log(error)
+      this.setState({ fetching: false })
     }
   }
 
@@ -155,7 +159,7 @@ class App extends React.Component {
             <h1>Advanced Filter</h1>
           </Title>
           <InputFields submit={this.getVideos} />
-          <DataTable items={this.state.items} sortItems={this.sortItems} />
+          {this.state.fetching ? 'Getting data...' : <DataTable items={this.state.items} sortItems={this.sortItems} />}
         </Container>
       </AppStyled>
     );
