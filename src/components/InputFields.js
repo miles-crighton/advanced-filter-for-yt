@@ -35,10 +35,10 @@ export default function InputFields(props) {
                     <tr>
                         <td>Duration: </td>
                         <td>
-                            <InputNum type='number' value={lowerDuration} onChange={e => setLowerDuration(e.target.value)} min="0" />
-                            <span>to</span>
-                            <InputNum type='number' value={upperDuration} onChange={e => setUpperDuration(e.target.value)} min="0" />
-                            <span>Minutes</span>
+                            <InputNum type='number' value={lowerDuration} onChange={e => setLowerDuration(e.target.value)} min="0" max="60"/>
+                            <span> to </span>
+                            <InputNum type='number' value={upperDuration} onChange={e => setUpperDuration(e.target.value)} min="0" max="60"/>
+                            <span> minutes</span>
                         </td>
                     </tr>
                 </tbody>

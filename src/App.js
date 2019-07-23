@@ -6,8 +6,11 @@ import DataTable from './components/DataTable'
 import styled from 'styled-components'
 
 const AppStyled = styled.div`
+  margin: 0;
   display: flex;
   justify-content: center;
+
+  height: 100%;
 `
 
 const Logo = styled.img`
@@ -22,7 +25,7 @@ const Title = styled.div`
 const Container = styled.div`
   background-color: lightgrey;
   min-width: 400px;
-  padding: 30px;
+  padding: 0px 30px 0px 30px;
   height: 100%;
 `
 
@@ -72,7 +75,7 @@ class App extends React.Component {
     this.setState({ fetching: true })
     try {
       let id = await this.getID(username)
-      let data = await fetch('https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&q=' + searchTerm + '&channelId=' + id + '&key=' + API_KEY)
+      let data = await fetch('https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=50&q=' + searchTerm + '&channelId=' + id + '&key=' + API_KEY)
       let json = await data.json()
       let items = await json.items
       let durations = await this.getVideoDurations(items)
