@@ -3,6 +3,7 @@ import logo from './logo.svg'
 import InputFields from './components/InputFields'
 import DataTable from './components/DataTable'
 import styled from 'styled-components'
+import { thisTypeAnnotation } from '@babel/types';
 
 const AppStyled = styled.div`
   margin: 0;
@@ -54,7 +55,7 @@ class App extends React.Component {
       items: [],
       ids: {},
       durations: {},
-      fetching: false,
+      status: 'initial',
     }
     this.getID = this.getID.bind(this)
     this.getVideos = this.getVideos.bind(this)
@@ -87,7 +88,7 @@ class App extends React.Component {
   }
 
   async getVideos(username, searchTerm, lowerDuration, upperDuration) {
-    this.setState({ fetching: true })
+    this.setState({ status: 'fetching' })
     try {
       let id = await this.getID(username)
       let data = await fetch('https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=50&q=' + searchTerm + '&channelId=' + id + '&key=' + API_KEY)
@@ -96,23 +97,23 @@ class App extends React.Component {
       let durations = await this.getVideoDurations(items)
 
       if (items.length === 0) {
-        throw Error("No video results found")
+        this.setState({ status: 'noresults' })
+      } else {
+        await items.forEach(item => {
+          return Object.assign(item, { duration: durations[item.id.videoId] })
+        })
+        let newItems = await items.filter(item => {
+          //TODO: Improve this catch for missing duration from API request
+          if (item.duration !== undefined) {
+            return lowerDuration < item.duration.minutes && item.duration.minutes < upperDuration
+          }
+          return false
+        })
+        this.setState({ items: newItems, status: 'fetched' })
       }
-  
-      await items.forEach(item => {
-        return Object.assign(item, {duration: durations[item.id.videoId]})
-      })
-      let newItems = await items.filter(item => {
-        //TODO: Improve this catch for missing duration from API request
-        if (item.duration !== undefined) {
-          return lowerDuration < item.duration.minutes && item.duration.minutes < upperDuration
-        }
-        return false
-      })
-      this.setState({ items: newItems, fetching: false })
     } catch (error) {
       console.log(error)
-      this.setState({ fetching: false })
+      this.setState({ status: 'error' })
     }
   }
 
@@ -178,8 +179,8 @@ class App extends React.Component {
               <h1>Advanced Filter</h1>
             </Title>
             <InputFields submit={this.getVideos} />
-            {this.state.fetching ? 'Getting data...' : <DataTable items={this.state.items} sortItems={this.sortItems} />}
-
+            <StatusDisplay status={this.state.status} />
+            {this.state.status === 'fetched' ? <DataTable items={this.state.items} sortItems={this.state.sortItems} /> : null}
           </InnerContainer>
           <footer>
             <p>Assests & Data property of YouTube ©</p>
@@ -189,6 +190,29 @@ class App extends React.Component {
       </AppStyled>
 
     );
+  }
+}
+
+const StatusContainer = styled.div`
+  width: 100%;
+  padding: 5px;
+  text-align: center;
+`
+
+function StatusDisplay(props) {
+  switch(props.status) {
+    case 'initial':
+      return ''
+    case 'fetching':
+      return <StatusContainer>Fetching Results...</StatusContainer>
+    case 'noresults':
+      return <StatusContainer>No results found</StatusContainer>
+    case 'error':
+      return <StatusContainer>Error</StatusContainer>
+    case 'fetched':
+      return ''
+    default:
+      return <StatusContainer></StatusContainer>
   }
 }
 
