@@ -1,4 +1,9 @@
 import React, { useState } from 'react'
+import styled from 'styled-components'
+
+const InputNum = styled.input`
+    max-width: 30px;
+`
 
 export default function InputFields(props) {
     const [username, setUsername] = useState('yogawithadriene')
@@ -23,9 +28,10 @@ export default function InputFields(props) {
             </div>
             <div>
                 <span>Duration: </span>
-                <input type='number' value={lowerDuration} onChange={e => setLowerDuration(e.target.value)} />
+                <InputNum type='number' value={lowerDuration} onChange={e => setLowerDuration(e.target.value)} />
                 <span>to</span>
-                <input type='number' value={upperDuration} onChange={e => setUpperDuration(e.target.value)} />
+                <InputNum type='number' value={upperDuration} onChange={e => setUpperDuration(e.target.value)} />
+                <span>Minutes</span>
             </div>
             <button onClick={handleSubmit}>Execute</button>
         </form>

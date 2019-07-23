@@ -2,8 +2,19 @@ import React from 'react';
 import './App.css';
 import InputFields from './components/InputFields'
 import DataTable from './components/DataTable'
+import styled from 'styled-components'
 
-const API_KEY = 'AIzaSyD6ba4mKmnnU0EVfg_hy_jNI3B8eJchAo4' 
+const AppStyled = styled.div`
+  display: flex;
+  justify-content: center;
+`
+
+const Container = styled.div`
+  background-color: lightgrey;
+  padding: 30px;
+`
+
+const API_KEY = 'AIzaSyD6ba4mKmnnU0EVfg_hy_jNI3B8eJchAo4'
 
 class App extends React.Component {
 
@@ -101,11 +112,13 @@ class App extends React.Component {
 
   render() {
     return (
-      <div>
-        <h1>YouTube Advanced Filter</h1>
-        <InputFields submit={this.getVideos} />
-        <DataTable items={this.state.items} />
-      </div>
+      <AppStyled>
+        <Container>
+          <h1>YouTube Advanced Filter</h1>
+          <InputFields submit={this.getVideos} />
+          <DataTable items={this.state.items} />
+        </Container>
+      </AppStyled>
     );
   }
 }

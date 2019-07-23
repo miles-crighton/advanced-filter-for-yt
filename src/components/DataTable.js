@@ -1,9 +1,27 @@
 import React from 'react'
+import styled from 'styled-components'
+
+let Table = styled.table`
+    th {
+        text-align: left;
+    }
+    td {
+        max-width: 300px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+`
 
 export default function DataTable(props) {
     return (
-        <table>
+        <Table>
             <tbody>
+                <tr>
+                    <th>Title</th>
+                    <th>Duration</th>
+                    <th>Link</th>
+                </tr>
                 {props.items.map((item, idx) => {
                     return (
                         <tr key={idx}>
@@ -14,6 +32,6 @@ export default function DataTable(props) {
                     )
                 })}
             </tbody>
-        </table>
+        </Table>
     )
 }
