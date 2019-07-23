@@ -13,14 +13,20 @@ export default function InputFields(props) {
 
     return (
         <form onSubmit={handleSubmit}>
-            <span>Channel Name: </span>
-            <input type='text' value={username} onChange={e => setUsername(e.target.value)} />
-            <span>Search Term: </span>
-            <input type='text' value={searchTerm} onChange={e => setSearchterm(e.target.value)} />
-            <span>Duration: </span>
-            <input type='number' value={lowerDuration} onChange={e => setLowerDuration(e.target.value)} />
-            <span>to</span>
-            <input type='number' value={upperDuration} onChange={e => setUpperDuration(e.target.value)} />
+            <div>
+                <span>Channel Name: </span>
+                <input type='text' value={username} onChange={e => setUsername(e.target.value)} />
+            </div>
+            <div>
+                <span>Search Term: </span>
+                <input type='text' value={searchTerm} onChange={e => setSearchterm(e.target.value)} />
+            </div>
+            <div>
+                <span>Duration: </span>
+                <input type='number' value={lowerDuration} onChange={e => setLowerDuration(e.target.value)} />
+                <span>to</span>
+                <input type='number' value={upperDuration} onChange={e => setUpperDuration(e.target.value)} />
+            </div>
             <button onClick={handleSubmit}>Execute</button>
         </form>
     );
