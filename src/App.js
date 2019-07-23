@@ -9,37 +9,37 @@ import StatusDisplay from './components/StatusDisplay'
 import { getVideoList } from './apiFunctions'
 
 const AppStyled = styled.div`
-  margin: 0;
-  display: flex;
-  justify-content: center;
-  height: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    height: 100%;
 `
 
 const Logo = styled.img`
-  width: 120px;
-  margin-right: 10px;
+    width: 120px;
+    margin-right: 10px;
 `
 
 const Title = styled.div`
-  display: flex;
-  width: 100%;
+    display: flex;
+    width: 100%;
 `
 
 const OuterContainer = styled.div`
-  background-color: lightgrey;
-  min-width: 460px;
-  height: 100%;
+    background-color: lightgrey;
+    min-width: 460px;
+    height: 100%;
 
-  footer {
-    background: grey;
-    width: 100%;
-    padding: 5px 0px 5px 0px;
-    color: white;
-    text-align: center
-  }
-  p {
-    margin: 5px;
-  }
+    footer {
+        background: grey;
+        width: 100%;
+        padding: 5px 0px 5px 0px;
+        color: white;
+        text-align: center
+    }
+    p {
+        margin: 5px;
+    }
 `
 
 const InnerContainer = styled.div`
