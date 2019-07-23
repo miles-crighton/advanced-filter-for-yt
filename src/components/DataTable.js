@@ -27,7 +27,7 @@ export default function DataTable(props) {
                     return (
                         <tr key={idx}>
                             <td>{item.snippet.title}</td>
-                            <td>{item.duration.minutes} minutes</td>
+                            <td>{item.duration.minutes}m {item.duration.seconds}s</td>
                             <td><a href={'https://www.youtube.com/watch?v=' + item.id.videoId} target='_blank' rel="noopener noreferrer">Link</a></td>
                         </tr>
                     )

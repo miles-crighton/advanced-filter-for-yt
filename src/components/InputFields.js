@@ -33,7 +33,7 @@ export default function InputFields(props) {
                 <InputNum type='number' value={upperDuration} onChange={e => setUpperDuration(e.target.value)} min="0"/>
                 <span>Minutes</span>
             </div>
-            <button onClick={handleSubmit}>Execute</button>
+            <button onClick={handleSubmit}>Search</button>
         </form>
     );
 }
