@@ -33,10 +33,12 @@ class App extends React.Component {
     super(props);
     this.state = {
       items: [],
-      ids: {}
+      ids: {},
+      durations: {}
     }
     this.getID = this.getID.bind(this)
     this.getVideos = this.getVideos.bind(this)
+    this.sortItems = this.sortItems.bind(this)
   }
 
   //Converts a YT username to an ID number
@@ -58,7 +60,7 @@ class App extends React.Component {
 
     let id = json.items[0].id
     this.setState((prevState) => {
-      return { ids: Object.assign({}, this.state.ids, { [username]: id }) }
+      return { ids: Object.assign({}, prevState.ids, { [username]: id }) }
     })
     console.log(`Id for ${username} fetched: ${id}`)
     return id
@@ -71,6 +73,10 @@ class App extends React.Component {
       let json = await data.json()
       let items = await json.items
       let durations = await this.getVideoDurations(items)
+
+      if (items.length === 0) {
+        throw Error("No video results found")
+      }
   
       await items.forEach(item => {
         return Object.assign(item, {duration: durations[item.id.videoId]})
@@ -82,7 +88,6 @@ class App extends React.Component {
         }
         return false
       })
-      console.log(newItems)
       this.setState({ items: newItems })
     } catch (error) {
       console.log(error)
@@ -127,8 +132,19 @@ class App extends React.Component {
       minutes,
       seconds
     }
-    
     return durationFormatted
+  }
+
+  sortItems(ascending = false) {
+    console.log('Sorting items...')
+    console.log(ascending)
+    let items = [...this.state.items]
+    let itemsSorted = items.sort((a, b) => {
+      return ascending === true ? 
+        a.duration.minutes - b.duration.minutes :
+        b.duration.minutes - a.duration.minutes
+    });
+    this.setState({items: itemsSorted})
   }
 
   render() {
@@ -139,8 +155,7 @@ class App extends React.Component {
             <Logo src={logo} alt='logo'></Logo>
             <h1>Advanced Filter</h1>
           </Title>
-
-          
+          <button onClick={this.sortItems} />
           <InputFields submit={this.getVideos} />
           <DataTable items={this.state.items} />
         </Container>
