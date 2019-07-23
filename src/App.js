@@ -183,7 +183,7 @@ class App extends React.Component {
 
           </InnerContainer>
           <footer>
-            <p>Assests & Data gathered from YouTube ©</p>
+            <p>Assests & Data property of YouTube ©</p>
           </footer>
         </OuterContainer>
 
