@@ -29,8 +29,8 @@ export default function DataTable(props) {
                     <th>Title</th>
                     <th>
                         <span>Duration</span>
-                        <button onClick={() => props.sortItems(true)}>^</button>
-                        <button onClick={() => props.sortItems(false)}>\/</button>
+                        <button onClick={() => props.sortItems(true)}>↑</button>
+                        <button onClick={() => props.sortItems(false)}>↓</button>
                     </th>
                     <th>Link</th>
                 </tr>
