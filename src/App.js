@@ -154,10 +154,8 @@ class App extends React.Component {
             <Logo src={logo} alt='logo'></Logo>
             <h1>Advanced Filter</h1>
           </Title>
-          <button onClick={() => this.sortItems(true)}>Sort Ascending</button>
-          <button onClick={() => this.sortItems(false)}>Sort Descending</button>
           <InputFields submit={this.getVideos} />
-          <DataTable items={this.state.items} />
+          <DataTable items={this.state.items} sortItems={this.sortItems} />
         </Container>
       </AppStyled>
     );

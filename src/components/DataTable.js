@@ -27,7 +27,10 @@ export default function DataTable(props) {
             <tbody>
                 <tr>
                     <th>Title</th>
-                    <th>Duration</th>
+                    <th>Duration 
+                        <button onClick={() => props.sortItems(true)}>^</button>
+                        <button onClick={() => props.sortItems(false)}>\/</button>
+                    </th>
                     <th>Link</th>
                 </tr>
                 {props.items.map((item, idx) => {
