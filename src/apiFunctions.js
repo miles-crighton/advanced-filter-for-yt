@@ -70,7 +70,7 @@ export async function getVideoDurations(videoIDs) {
     let fullURL = baseURL + '&id=' + videoString + '&key=' + API_KEY 
     let resp = await fetch(fullURL)
     let json = await resp.json()
-    let items = await json.items
+    let items = json.items
 
     //Add new durations to map
     for (let item of items) {
@@ -83,4 +83,38 @@ export async function getVideoDurations(videoIDs) {
 
     //Return only requested IDs - Or all currently mapped?
     return durations
+}
+
+export async function getVideoList(username, searchTerm, lowerDuration, upperDuration) {
+    try {
+        let id = await getID(username)
+        const MAX_RESULTS = 5
+        const baseURL = 'https://www.googleapis.com/youtube/v3/search?part=snippet'
+        const fullURL = baseURL + '&maxResults=' + MAX_RESULTS + '&q=' + searchTerm + ' &channelId=' + id + ' &key=' + API_KEY
+        let data = await fetch(fullURL)
+        let json = await data.json()
+        let items = json.items
+        console.log(json)
+
+        if (items.length === 0) {
+          return { items: [], status: 'noresults'}
+        } else {
+            //TODO: Form ID array from items and pass in below
+            //let durations = await getVideoDurations(items)
+            items.forEach(item => {
+                return Object.assign(item, { duration: durations[item.id.videoId] })
+            })
+            let newItems = items.filter(item => {
+                //TODO: Improve this catch for missing duration from API request
+                if (item.duration !== undefined) {
+                return lowerDuration < item.duration.minutes && item.duration.minutes < upperDuration
+                }
+                return false
+            })
+            return { items: newItems, status: 'fetched' }
+        }
+    } catch (error) {
+        console.log(error)
+        return ({ items: [], status: 'error' })
+    }
 }

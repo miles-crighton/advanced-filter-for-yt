@@ -6,8 +6,7 @@ import InputFields from './components/InputFields'
 import DataTable from './components/DataTable'
 import StatusDisplay from './components/StatusDisplay'
 
-import { convertVideoDuration, getVideoDurations } from './helperFunctions'
-import { getID } from './apiFunctions'
+import { getVideoList } from './apiFunctions'
 
 const AppStyled = styled.div`
   margin: 0;
@@ -65,36 +64,9 @@ class App extends React.Component {
 
   async getVideos(username, searchTerm, lowerDuration, upperDuration) {
     this.setState({ status: 'fetching' })
-    try {
-      let id = await getID(username)
-      // let data = await fetch('https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&q=' + searchTerm + '&channelId=' + id + '&key=' + API_KEY)
-      // let json = await data.json()
-      // let items = await json.items
-      // console.log(json)
-
-      // if (items.length === 0) {
-      //   this.setState({ status: 'noresults' })
-      // } else {
-      //   let durations = await getVideoDurations(items)
-      //   await items.forEach(item => {
-      //     return Object.assign(item, { duration: durations[item.id.videoId] })
-      //   })
-      //   let newItems = await items.filter(item => {
-      //     //TODO: Improve this catch for missing duration from API request
-      //     if (item.duration !== undefined) {
-      //       return lowerDuration < item.duration.minutes && item.duration.minutes < upperDuration
-      //     }
-      //     return false
-      //   })
-      //   this.setState({ items: newItems, status: 'fetched' })
-      // }
-    } catch (error) {
-      console.log(error)
-      this.setState({ status: 'error' })
-    }
+    const { items, status } = await getVideoList(username, searchTerm, lowerDuration, upperDuration)
+    this.setState( { items, status } )
   }
-
-
 
   sortItems(ascending = false) {
     console.log('Sorting items...')
