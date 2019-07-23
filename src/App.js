@@ -6,7 +6,7 @@ import InputFields from './components/InputFields'
 import DataTable from './components/DataTable'
 import StatusDisplay from './components/StatusDisplay'
 
-import { convertVideoDuration } from './helperFunctions'
+import { convertVideoDuration, getVideoDurations } from './helperFunctions'
 import { getID } from './apiFunctions'
 
 const AppStyled = styled.div`
@@ -63,8 +63,6 @@ class App extends React.Component {
     this.sortItems = this.sortItems.bind(this)
   }
 
-
-
   async getVideos(username, searchTerm, lowerDuration, upperDuration) {
     this.setState({ status: 'fetching' })
     try {
@@ -77,7 +75,7 @@ class App extends React.Component {
       // if (items.length === 0) {
       //   this.setState({ status: 'noresults' })
       // } else {
-      //   let durations = await this.getVideoDurations(items)
+      //   let durations = await getVideoDurations(items)
       //   await items.forEach(item => {
       //     return Object.assign(item, { duration: durations[item.id.videoId] })
       //   })
@@ -96,24 +94,7 @@ class App extends React.Component {
     }
   }
 
-  async getVideoDurations(videos) {
-    let videoString = ''
-    for (let video of videos) {
-      videoString += video.id.videoId + '%2C'
-    }
-    videoString = videoString.slice(0, videoString.length - 3) //Remove last %2C
-    let full_url = 'https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=' + videoString + '&key=' + API_KEY
-    let resp = await fetch(full_url)
-    let json = await resp.json()
-    let items = await json.items
-    console.log(items)
-    let durations = {}
-    for (let item of items) {
-      durations[item.id] = convertVideoDuration(item.contentDetails.duration)
-    }
-    console.log(durations)
-    return durations
-  }
+
 
   sortItems(ascending = false) {
     console.log('Sorting items...')
