@@ -6,7 +6,8 @@ import InputFields from './components/InputFields'
 import DataTable from './components/DataTable'
 import StatusDisplay from './components/StatusDisplay'
 
-import { convertVideoDuration } from './helperFunctions.js'
+import { convertVideoDuration } from './helperFunctions'
+import { getID } from './apiFunctions'
 
 const AppStyled = styled.div`
   margin: 0;
@@ -58,40 +59,20 @@ class App extends React.Component {
       durations: {},
       status: 'initial',
     }
-    this.getID = this.getID.bind(this)
     this.getVideos = this.getVideos.bind(this)
     this.sortItems = this.sortItems.bind(this)
   }
 
-  //Converts a YT username to an ID number
-  async getID(username) {
-    console.log('Getting ID...')
 
-    if (this.state.ids[username] !== undefined) {
-      let id = this.state.ids[username]
-      console.log(`Found cached id: ${id} for ${username}`)
-      return this.state.ids[username]
-    }
-    
-    let resp = await fetch('https://www.googleapis.com/youtube/v3/channels?part=snippet&forUsername=' + username + '&key=' + API_KEY)
-    let json = await resp.json()
-
-    if (json.items.length === 0){
-      throw Error("Unable to convert username to ID");
-    }
-
-    let id = json.items[0].id
-    this.setState((prevState) => {
-      return { ids: Object.assign({}, prevState.ids, { [username]: id }) }
-    })
-    console.log(`Id for ${username} fetched: ${id}`)
-    return id
-  }
 
   async getVideos(username, searchTerm, lowerDuration, upperDuration) {
     this.setState({ status: 'fetching' })
     try {
-      let id = await this.getID(username)
+      let id = await getID(username, this.state.ids)
+      this.setState((prevState) => {
+        return { ids: Object.assign({}, prevState.ids, { [username]: id }) }
+      })
+
       let data = await fetch('https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&q=' + searchTerm + '&channelId=' + id + '&key=' + API_KEY)
       let json = await data.json()
       let items = await json.items
