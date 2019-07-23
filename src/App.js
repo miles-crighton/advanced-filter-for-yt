@@ -48,56 +48,55 @@ const InnerContainer = styled.div`
 
 class App extends React.Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      items: [],
-      ids: {},
-      durations: {},
-      status: 'initial',
+    constructor(props) {
+        super(props);
+        this.state = {
+            items: [],
+            ids: {},
+            durations: {},
+            status: 'initial',
+        }
+        this.getVideos = this.getVideos.bind(this)
+        this.sortItems = this.sortItems.bind(this)
     }
-    this.getVideos = this.getVideos.bind(this)
-    this.sortItems = this.sortItems.bind(this)
-  }
 
-  async getVideos(username, searchTerm, lowerDuration, upperDuration) {
-    this.setState({ items: [], status: 'fetching' })
-    const { items, status } = await getVideoList(username, searchTerm, lowerDuration, upperDuration)
-    this.setState( { items, status } )
-  }
+    async getVideos(username, searchTerm, lowerDuration, upperDuration) {
+        this.setState({ items: [], status: 'fetching' })
+        const { items, status } = await getVideoList(username, searchTerm, lowerDuration, upperDuration)
+        this.setState( { items, status } )
+    }
 
-  sortItems(ascending = false) {
-    console.log('Sorting items...')
-    let items = [...this.state.items]
-    let itemsSorted = items.sort((a, b) => {
-      return ascending ? 
-        b.duration.minutes - a.duration.minutes :
-        a.duration.minutes - b.duration.minutes
-    });
-    this.setState({ items: itemsSorted })
-  }
+    sortItems(ascending = false) {
+        console.log('Sorting items...')
+        let items = [...this.state.items]
+        let itemsSorted = items.sort((a, b) => {
+            return ascending ? 
+                b.duration.minutes - a.duration.minutes || b.duration.seconds - a.duration.seconds :
+                a.duration.minutes - b.duration.minutes || a.duration.seconds - b.duration.seconds
+        });
+        this.setState({ items: itemsSorted })
+    }
 
-  render() {
+render() {
     return (
-      <AppStyled>
-        <OuterContainer>
-          <InnerContainer>
-            <Title>
-              <Logo src={logo} alt='logo'></Logo>
-              <h1>Advanced Filter</h1>
-            </Title>
-            <InputFields submit={this.getVideos} />
-            <StatusDisplay status={this.state.status} />
-            {this.state.status === 'fetched' ? <DataTable items={this.state.items} sortItems={this.sortItems} /> : null}
-          </InnerContainer>
-          <footer>
-            <p>Assests & Data property of YouTube ©</p>
-          </footer>
-        </OuterContainer>
-
-      </AppStyled>
+        <AppStyled>
+            <OuterContainer>
+                <InnerContainer>
+                    <Title>
+                        <Logo src={logo} alt='logo'></Logo>
+                        <h1>Advanced Filter</h1>
+                    </Title>
+                    <InputFields submit={this.getVideos} />
+                    <StatusDisplay status={this.state.status} />
+                    {this.state.status === 'fetched' ? <DataTable items={this.state.items} sortItems={this.sortItems} /> : null}
+                </InnerContainer>
+                <footer>
+                    <p>Assests & Data property of YouTube ©</p>
+                </footer>
+            </OuterContainer>
+        </AppStyled>
     );
-  }
+}
 }
 
 export default App;
