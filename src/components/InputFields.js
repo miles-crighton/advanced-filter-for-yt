@@ -28,9 +28,9 @@ export default function InputFields(props) {
             </div>
             <div>
                 <span>Duration: </span>
-                <InputNum type='number' value={lowerDuration} onChange={e => setLowerDuration(e.target.value)} />
+                <InputNum type='number' value={lowerDuration} onChange={e => setLowerDuration(e.target.value)} min="0"/>
                 <span>to</span>
-                <InputNum type='number' value={upperDuration} onChange={e => setUpperDuration(e.target.value)} />
+                <InputNum type='number' value={upperDuration} onChange={e => setUpperDuration(e.target.value)} min="0"/>
                 <span>Minutes</span>
             </div>
             <button onClick={handleSubmit}>Execute</button>

@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import logo from './logo.svg'
 import InputFields from './components/InputFields'
 import DataTable from './components/DataTable'
 import styled from 'styled-components'
@@ -9,9 +10,19 @@ const AppStyled = styled.div`
   justify-content: center;
 `
 
+const Logo = styled.img`
+  width: 120px;
+  margin-right: 10px;
+`
+
+const Title = styled.div`
+  display: flex;
+`
+
 const Container = styled.div`
   background-color: lightgrey;
   padding: 30px;
+  height: 100%;
 `
 
 const API_KEY = 'AIzaSyD6ba4mKmnnU0EVfg_hy_jNI3B8eJchAo4'
@@ -114,7 +125,12 @@ class App extends React.Component {
     return (
       <AppStyled>
         <Container>
-          <h1>YouTube Advanced Filter</h1>
+          <Title>
+            <Logo src={logo} alt='logo'></Logo>
+            <h1>Advanced Filter</h1>
+          </Title>
+
+          
           <InputFields submit={this.getVideos} />
           <DataTable items={this.state.items} />
         </Container>

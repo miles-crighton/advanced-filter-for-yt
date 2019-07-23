@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 let Table = styled.table`
+    min-width: 500px;
     th {
         text-align: left;
     }
