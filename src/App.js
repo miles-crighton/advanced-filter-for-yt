@@ -137,14 +137,13 @@ class App extends React.Component {
 
   sortItems(ascending = false) {
     console.log('Sorting items...')
-    console.log(ascending)
     let items = [...this.state.items]
     let itemsSorted = items.sort((a, b) => {
-      return ascending === true ? 
-        a.duration.minutes - b.duration.minutes :
-        b.duration.minutes - a.duration.minutes
+      return ascending ? 
+        b.duration.minutes - a.duration.minutes :
+        a.duration.minutes - b.duration.minutes
     });
-    this.setState({items: itemsSorted})
+    this.setState({ items: itemsSorted })
   }
 
   render() {
@@ -155,7 +154,8 @@ class App extends React.Component {
             <Logo src={logo} alt='logo'></Logo>
             <h1>Advanced Filter</h1>
           </Title>
-          <button onClick={this.sortItems} />
+          <button onClick={() => this.sortItems(true)}>Sort Ascending</button>
+          <button onClick={() => this.sortItems(false)}>Sort Descending</button>
           <InputFields submit={this.getVideos} />
           <DataTable items={this.state.items} />
         </Container>
