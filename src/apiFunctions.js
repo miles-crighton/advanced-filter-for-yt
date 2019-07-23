@@ -65,24 +65,31 @@ export async function getVideoDurations(videoIDs) {
         }
     }
 
-    //Fetch durations from YT API
-    let baseURL = 'https://www.googleapis.com/youtube/v3/videos?part=contentDetails'
-    let fullURL = baseURL + '&id=' + videoString + '&key=' + API_KEY 
-    let resp = await fetch(fullURL)
-    let json = await resp.json()
-    let items = json.items
+    //Fetch uncached durations from YT API
+    if (videoString !== '') {
+        let baseURL = 'https://www.googleapis.com/youtube/v3/videos?part=contentDetails'
+        let fullURL = baseURL + '&id=' + videoString + '&key=' + API_KEY
+        let resp = await fetch(fullURL)
+        let json = await resp.json()
+        let items = json.items
 
-    //Add new durations to map
-    for (let item of items) {
-        durations[item.id] = convertVideoDuration(item.contentDetails.duration)
+        //Add new durations to map
+        for (let item of items) {
+            durations[item.id] = convertVideoDuration(item.contentDetails.duration)
+        }
+
+        //Store durations in browser
+        setLocalStorage('ytVideoDurations', durations)
+        console.log('Durations stored: ', getLocalStorage('ytVideoDurations'))
     }
 
-    //Store durations in browser
-    setLocalStorage('ytUserIDs', durations)
-    console.log('Durations stored: ', getLocalStorage('ytVideoDurations'))
+    //Compile requested durations from videoIDs
+    let requestedDurations = {}
+    for (let id of videoIDs) {
+        requestedDurations[id] = durations[id]
+    }
 
-    //Return only requested IDs - Or all currently mapped?
-    return durations
+    return requestedDurations
 }
 
 /**

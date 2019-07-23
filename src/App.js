@@ -46,8 +46,6 @@ const InnerContainer = styled.div`
     margin: 0px 30px 0px 30px;
 `
 
-const API_KEY = 'AIzaSyD6ba4mKmnnU0EVfg_hy_jNI3B8eJchAo4'
-
 class App extends React.Component {
 
   constructor(props) {
@@ -63,7 +61,7 @@ class App extends React.Component {
   }
 
   async getVideos(username, searchTerm, lowerDuration, upperDuration) {
-    this.setState({ status: 'fetching' })
+    this.setState({ items: [], status: 'fetching' })
     const { items, status } = await getVideoList(username, searchTerm, lowerDuration, upperDuration)
     this.setState( { items, status } )
   }
