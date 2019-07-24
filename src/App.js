@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components'
 
 import logo from './logo.svg'
+import developedYoutube from './youtube.png'
 import InputFields from './components/InputFields'
 import DataTable from './components/DataTable'
 import StatusDisplay from './components/StatusDisplay'
@@ -16,14 +17,27 @@ const AppStyled = styled.div`
 `
 
 const Logo = styled.img`
-    width: 120px;
-    margin-right: 10px;
+    width: 80px;
+    position: relative;
+    top: -3px;
+`
+
+const DevelopedYoutube = styled.img`
+    width: 200px;
 `
 
 const Title = styled.div`
     display: flex;
     justify-content: center;
+    vertical-align: bottom;
     width: 100%;
+    h1 {
+        margin: 5px;
+    }
+    h3 {
+        margin-left: 5px;
+        margin-right: 0px;
+    }
 `
 
 const OuterContainer = styled.div`
@@ -32,9 +46,13 @@ const OuterContainer = styled.div`
     height: 100%;
 
     footer {
+        display: flex;
+        justify-content: center;
+        vertical-align: middle; 
         background: grey;
+        padding-top: 10px;
+        padding-bottom: 10px;
         width: 100%;
-        padding: 5px 0px 5px 0px;
         color: white;
         text-align: center
     }
@@ -84,15 +102,17 @@ class App extends React.Component {
                 <OuterContainer>
                     <InnerContainer>
                         <Title>
-                            <Logo src={logo} alt='logo'></Logo>
                             <h1>Advanced Filter</h1>
+                            <h3>for</h3>
+                            <h1>YouTube</h1>
+
                         </Title>
                         <InputFields submit={this.getVideos} />
                         <StatusDisplay status={this.state.status} />
                         {this.state.status === 'fetched' ? <DataTable items={this.state.items} sortItems={this.sortItems} /> : null}
                     </InnerContainer>
                     <footer>
-                        <p>Assests & Data property of YouTube ©</p>
+                        <DevelopedYoutube src={developedYoutube} alt={'Developed with YouTube'}/>
                     </footer>
                 </OuterContainer>
             </AppStyled>
