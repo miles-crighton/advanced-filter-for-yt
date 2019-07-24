@@ -4,7 +4,9 @@ import styled from 'styled-components'
 import { getLocalStorage } from '../localStorage'
 
 const PresetsContainer = styled.div`
+    margin-left: 10px;
     border: 1px solid grey;
+    padding: 5px;
 
     h4 {
         text-align: center;

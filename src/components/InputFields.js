@@ -9,23 +9,21 @@ const InputNum = styled.input`
     max-width: 30px;
 `
 const QueryInputs = styled.div`
+    padding: 5px;
     border: 1px solid grey;
+
     table {
         width: 100%;
     }
     button {
+
         display: block;
         width: 50%;
-        margin: auto;
+        margin: 5px auto 5px auto;
     }
 `
 const InputsContainer = styled.div`
     display: flex;
-
-
-
-
-
 `
 
 export default function InputFields(props) {

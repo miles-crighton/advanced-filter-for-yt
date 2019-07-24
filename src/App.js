@@ -78,26 +78,26 @@ class App extends React.Component {
         this.setState({ items: itemsSorted })
     }
 
-render() {
-    return (
-        <AppStyled>
-            <OuterContainer>
-                <InnerContainer>
-                    <Title>
-                        <Logo src={logo} alt='logo'></Logo>
-                        <h1>Advanced Filter</h1>
-                    </Title>
-                    <InputFields submit={this.getVideos} />
-                    <StatusDisplay status={this.state.status} />
-                    {this.state.status === 'fetched' ? <DataTable items={this.state.items} sortItems={this.sortItems} /> : null}
-                </InnerContainer>
-                <footer>
-                    <p>Assests & Data property of YouTube ©</p>
-                </footer>
-            </OuterContainer>
-        </AppStyled>
-    );
-}
+    render() {
+        return (
+            <AppStyled>
+                <OuterContainer>
+                    <InnerContainer>
+                        <Title>
+                            <Logo src={logo} alt='logo'></Logo>
+                            <h1>Advanced Filter</h1>
+                        </Title>
+                        <InputFields submit={this.getVideos} />
+                        <StatusDisplay status={this.state.status} />
+                        {this.state.status === 'fetched' ? <DataTable items={this.state.items} sortItems={this.sortItems} /> : null}
+                    </InnerContainer>
+                    <footer>
+                        <p>Assests & Data property of YouTube ©</p>
+                    </footer>
+                </OuterContainer>
+            </AppStyled>
+        );
+    }
 }
 
 export default App;
