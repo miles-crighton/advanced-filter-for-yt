@@ -26,6 +26,11 @@ export default function PresetHandler(props) {
         setPresetList(Object.keys(presets))
     }, [presetList]);
 
+    function handleDelete() {
+        props.deletePreset(presetName)
+        setPresetName('')
+    }
+
     return (
         <PresetsContainer>
             <h4>Presets</h4>
@@ -38,7 +43,7 @@ export default function PresetHandler(props) {
             <div>
                 <button onClick={() => props.loadPreset(presetName)}>Load</button>
                 <button onClick={() => props.savePreset(presetName)}>Save</button>
-                <button onClick={() => props.deletePreset(presetName)}>Delete</button>
+                <button onClick={handleDelete}>Delete</button>
             </div>
         </PresetsContainer>
     )
