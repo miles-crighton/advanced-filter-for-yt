@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components'
 
-import logo from './logo.svg'
 import developedYoutube from './youtube.png'
 import InputFields from './components/InputFields'
 import DataTable from './components/DataTable'
@@ -15,17 +14,9 @@ const AppStyled = styled.div`
     justify-content: center;
     height: 100%;
 `
-
-const Logo = styled.img`
-    width: 80px;
-    position: relative;
-    top: -3px;
-`
-
 const DevelopedYoutube = styled.img`
     width: 200px;
 `
-
 const Title = styled.div`
     display: flex;
     justify-content: center;
@@ -39,7 +30,6 @@ const Title = styled.div`
         margin-right: 0px;
     }
 `
-
 const OuterContainer = styled.div`
     background-color: lightgrey;
     min-width: 460px;
@@ -60,7 +50,6 @@ const OuterContainer = styled.div`
         margin: 5px;
     }
 `
-
 const InnerContainer = styled.div`
     margin: 0px 30px 0px 30px;
 `
