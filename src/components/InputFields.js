@@ -27,8 +27,8 @@ const InputsContainer = styled.div`
 `
 
 export default function InputFields(props) {
-    const [username, setUsername] = useState('yogawithadriene')
-    const [searchTerm, setSearchterm] = useState('Back')
+    const [username, setUsername] = useState('')
+    const [searchTerm, setSearchterm] = useState('')
     const [lowerDuration, setLowerDuration] = useState(0)
     const [upperDuration, setUpperDuration] = useState(30)
 
