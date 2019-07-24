@@ -1,6 +1,6 @@
 # Advanced Filter for YouTube
 
-Live version: to be added
+Live version: [Link](https://miles-crighton.github.io/advanced-filter-for-yt/)
 
 ## Motive 
 The aim of the app was provide fast search queries without navigating through the YT interface.
