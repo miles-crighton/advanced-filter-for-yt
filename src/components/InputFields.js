@@ -51,10 +51,10 @@ export default function InputFields(props) {
             return
         }
 
-        //If Overide, alert to confirm with user
+        //If Override, alert to confirm with user
         if (presets[name] !== undefined) {
-            let overide = window.confirm('Do you want to overide preset?');
-            if (!overide) {
+            let override = window.confirm('Do you want to override preset?');
+            if (!override) {
                 console.log('Aborting preset save')
                 return 
             }
