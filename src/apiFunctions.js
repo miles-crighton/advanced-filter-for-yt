@@ -1,7 +1,7 @@
 import { getLocalStorage, setLocalStorage } from './localStorage'
 import { convertVideoDuration } from './helperFunctions'
 
-const API_KEY = 'AIzaSyD6ba4mKmnnU0EVfg_hy_jNI3B8eJchAo4'
+const API_KEY = process.env.REACT_APP_API_KEY
 
 //Converts a YT username to an ID number
 export async function getID(username) {
