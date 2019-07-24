@@ -108,7 +108,7 @@ export async function getVideoList(username, searchTerm, lowerDuration, upperDur
         let id = await getID(username)
 
         //Request search query data from YT API
-        const MAX_RESULTS = 5
+        const MAX_RESULTS = 25
         const baseURL = 'https://www.googleapis.com/youtube/v3/search?part=snippet'
         const fullURL = baseURL + '&maxResults=' + MAX_RESULTS + '&q=' + searchTerm + ' &channelId=' + id + ' &key=' + API_KEY
         let data = await fetch(fullURL)
